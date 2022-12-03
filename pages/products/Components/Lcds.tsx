@@ -15,7 +15,7 @@ const Lcds = (props: Props) => {
         { field: 'quantity', header: 'Quantity' }
     ]
     return (
-        <Datatable data={props.request} columns={columns} targetRoute={'products'} />
+        <Datatable data={props.request ?? []} columns={columns} targetRoute={'products'} />
     )
 }
 export default Lcds

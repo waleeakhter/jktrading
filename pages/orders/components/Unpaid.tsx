@@ -7,7 +7,7 @@ type Props = { request: Array<Object> }
 const Unpaid = ({ request }: Props) => {
     return (
         <Datatable
-            data={request}
+            data={request ?? []}
             columns={columns}
             hideEditBtn={true}
             hideDeleteBtn={true}
