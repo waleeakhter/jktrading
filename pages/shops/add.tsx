@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../../components/Layout'
 import { Formik, ErrorMessage } from "formik";
-import { initialVals } from "./JS/intialvalues"
-import { validationSchema } from "./JS/validationSchema"
-import { onSubmit } from "./JS/generic"
+import { initialVals } from "../../components/pages/orders/JS/intialvalues"
+import { validationSchema } from "../../components/pages/orders/JS/validationSchema"
+import { onSubmit } from "../../components/pages/orders/JS/generic"
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';

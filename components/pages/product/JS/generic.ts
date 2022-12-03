@@ -1,4 +1,4 @@
-import API from './../../../utils/axios'
+import API from '../../../../utils/axios'
 // onsubmit function
 type Props = {
     values: { fixed_quantity: number, quantity: number }, setSubmitting: Function,

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useMemo, useEffect } from 'react'
+import React, { PropsWithChildren, useCallback, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router';
 import { ProgressSpinner } from 'primereact/progressspinner';
@@ -6,11 +6,11 @@ import { AppContext } from './Layout';
 const Protected = ({ children }: PropsWithChildren): JSX.Element => {
     const { status, data } = useSession();
     const { toastMessage } = React.useContext(AppContext)
-    const Router = useRouter()
-    const redirect = useMemo(() => {
+    const route = useRouter()
+    const redirect = useCallback(() => {
         toastMessage("error", "UnAuthorized", "You are Unauthorized");
-        Router.replace("/");
-    }, [toastMessage, Router])
+        route.replace("/");
+    }, [toastMessage, route])
     useEffect(() => {
         status === "unauthenticated" ? redirect : null;
     }, [status, redirect])
