@@ -10,7 +10,7 @@ const Protected = ({ children }: PropsWithChildren): JSX.Element => {
     const redirect = useMemo(() => {
         toastMessage("error", "UnAuthorized", "You are Unauthorized");
         Router.replace("/");
-    }, [toastMessage])
+    }, [toastMessage, Router])
     useEffect(() => {
         status === "unauthenticated" ? redirect : null;
     }, [status, redirect])
