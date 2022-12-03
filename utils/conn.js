@@ -19,7 +19,7 @@ async function dbConnect() {
             bufferCommands: false,
         }
 
-        cached.promise = mongoose.connect(process.env.DB_URI,
+        cached.promise = mongoose.connect(`mongodb+srv://jktrading:jKtradinG.pT@cluster0.rtlavan.mongodb.net/?retryWrites=true&w=majority`,
             opts).then(mongoose => {
                 seedAdmin()
                 seedCategories()
