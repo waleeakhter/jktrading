@@ -14,7 +14,7 @@ const Mobiles = ({ request }: Props) => {
         { field: 'quantity', header: 'Quantity' }
     ]
     return (
-        <Datatable data={request} columns={columns} buyBtn={true} targetRoute={'products'} />
+        <Datatable data={request ?? []} columns={columns} buyBtn={true} targetRoute={'products'} />
     )
 }
 

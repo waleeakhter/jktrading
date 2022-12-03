@@ -24,9 +24,9 @@ const Datatable = (props: Props & actionButtons) => {
     const router = useRouter();
 
     // create columns for table
-    const dynamicColumns = props.columns.map((col: any, i) => {
+    const dynamicColumns = props.columns.length > 0 ? props.columns.map((col: any, i) => {
         return <Column key={col.header} {...col} sortable={i === 0 && true} style={{ flexGrow: 1, flexBasis: '100px' }} />
-    });
+    }) : null
 
     const [filters, setFilters] = useState({
         'product_name': { value: null, matchMode: FilterMatchMode.CONTAINS }
