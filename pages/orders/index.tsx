@@ -6,6 +6,7 @@ import Paid from './components/Paid'
 import Unpaid from './components/Unpaid'
 
 import { Button } from 'primereact/button'
+import { getSession, GetSessionParams } from 'next-auth/react'
 type Props = { orders: Array<{ status: string }>, errorCode?: any }
 
 const Index = ({ errorCode, orders }: Props) => {
@@ -35,15 +36,25 @@ const Index = ({ errorCode, orders }: Props) => {
     )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context: GetSessionParams | undefined) {
     // Fetching data from external API
-
-    const req = await getOrders()
-    console.log(req)
-    const errorCode = req.data ? false : req.response?.status
-    const orders = req.data
+    const session = await getSession(context)
+    if (session) {
+        const req = await getOrders()
+        console.log(req)
+        const errorCode = req.data ? false : req.response?.status
+        const orders = req.data
+        return { props: { errorCode, orders } }
+    } else {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            },
+        };
+    }
     // Pass data to the page via props
-    return { props: { errorCode, orders } }
+
 
 
 

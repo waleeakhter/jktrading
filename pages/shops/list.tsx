@@ -1,3 +1,4 @@
+import { getSession, GetSessionParams } from 'next-auth/react'
 import React from 'react'
 import Datatable from '../../components/Datatable/Datatable'
 import Layout from '../../components/Layout'
@@ -20,10 +21,22 @@ const AllShops = (props: Props) => {
         </Layout>
     )
 }
-export async function getServerSideProps() {
-    // Fetch data from external API
-    const request = await getShops()
-    // Pass data to the page via props
-    return { props: { request } }
-}
 export default AllShops
+
+export async function getServerSideProps(context: GetSessionParams | undefined) {
+
+    const session = await getSession(context)
+    if (session) {
+        // Fetch data from external API
+        const request = await getShops()
+        // Pass data to the page via props
+        return { props: { request } }
+    } else {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            },
+        };
+    }
+}

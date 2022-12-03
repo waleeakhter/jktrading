@@ -19,7 +19,7 @@ async function dbConnect() {
             bufferCommands: false,
         }
 
-        cached.promise = mongoose.connect('mongodb://127.0.0.1:27017/jk-trading',
+        cached.promise = mongoose.connect(process.env.DB_URI,
             opts).then(mongoose => {
                 seedAdmin()
                 seedCategories()
@@ -31,4 +31,3 @@ async function dbConnect() {
 }
 
 export default dbConnect
-
