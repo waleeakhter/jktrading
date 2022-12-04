@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: process.env.API_URL,
+    baseURL: 'https://jktrading.vercel.app/api/',
 })
 
 export default API  
