@@ -35,7 +35,7 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
 
     React.useEffect(() => {
         const fetchData = async () => {
-            const data = await getShops()
+            const data = await getShops(true)
             setShops(data)
 
         }
