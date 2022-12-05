@@ -9,7 +9,7 @@ import SellingModal from '../Modal/SellingModal';
 import ActionButtons from './ActionButtons';
 
 type Props = {
-    data: Array<Object>, columns: Array<Object>,
+    data: Array<Object>, columns: Array<Object>, search: string, tableName: string
 }
 
 export type actionButtons = {
@@ -23,13 +23,14 @@ const Datatable = (props: Props & actionButtons) => {
 
     const router = useRouter();
 
+
     // create columns for table
     const dynamicColumns = props.columns.length > 0 ? props.columns.map((col: any, i) => {
         return <Column key={col.header} {...col} sortable={i === 0 && true} style={{ flexGrow: 1, flexBasis: '100px' }} />
     }) : null
 
     const [filters, setFilters] = useState({
-        'product_name': { value: null, matchMode: FilterMatchMode.CONTAINS }
+        [props.search]: { value: null, matchMode: FilterMatchMode.CONTAINS }
     });
 
     const [first, setFirst] = useState(0);
@@ -41,7 +42,7 @@ const Datatable = (props: Props & actionButtons) => {
     const onGlobalFilterChange = (e: any) => {
         const value = e.target.value;
         let _filters = { ...filters };
-        _filters['product_name'].value = value;
+        _filters[props.search].value = value;
 
         setFilters(_filters);
         setGlobalFilterValue(value);
@@ -62,7 +63,7 @@ const Datatable = (props: Props & actionButtons) => {
     const renderHeader = () => {
         return (
             <div className="flex justify-between items-center">
-                <h5 className="m-0 text-2xl text-white">Prodcuts</h5>
+                <h5 className="m-0 text-2xl text-white">{props.tableName}</h5>
                 <div className='flex gap-2'>
                     <span className="p-input-icon-left">
                         <i className="pi pi-search" />

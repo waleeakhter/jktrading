@@ -7,7 +7,7 @@ type Props = { request: Array<Object> }
 const Paid = ({ request }: Props) => {
 
     return (
-        <Datatable data={request ?? []} columns={columns} hideActionCol={true} targetRoute={'orders'} />
+        <Datatable data={request ?? []} columns={columns} hideActionCol={true} targetRoute={'orders'} search={'shop_id.shop_name'} tableName={"Paid Orders"} />
     )
 }
 

@@ -17,7 +17,7 @@ const AllShops = (props: Props) => {
     ]
     return (
         <Layout>
-            <Datatable data={props.request} columns={columns} targetRoute={'shops'} />
+            <Datatable data={props.request} columns={columns} targetRoute={'shops'} search={'shop_name'} tableName={"Shops"} />
         </Layout>
     )
 }

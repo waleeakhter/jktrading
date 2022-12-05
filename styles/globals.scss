@@ -78,6 +78,23 @@
 .text-green {
   color: var(--text-green);
 }
+.tabs-name {
+  border-radius: 12px 12px 0 0 !important;
+  h1 {
+    width: 8rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem /* 18px */;
+    line-height: 0 /* 28px */;
+    &.active-tab {
+      @extend %box-shadow-inner;
+      color: #28f8c8;
+      font-weight: bold;
+    }
+  }
+}
 .btn-delete {
   background: linear-gradient(130.46deg, #ed5249 12.58%, #c91d12 89.78%) !important;
   box-shadow: -5px -5px 20px #404e4a, 4px 3px 19px #0d0f0f, inset 1px 1px 7px #c91d12;

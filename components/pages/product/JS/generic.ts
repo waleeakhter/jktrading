@@ -13,9 +13,11 @@ export const onSubmit = ({ values, setSubmitting, router, toast, id }: Props) =>
         res.status === 200 &&
             toast.current.show({ severity: 'success', summary: res.data.product.product_name, detail: res.data.message });
         id && router.replace('/products/lists')
+        setSubmitting(false)
     }).catch(err => {
         console.log(err, "error")
         err.response.status === 403 &&
             toast.current.show({ severity: 'error', summary: err.response.data.at(0).product_name, detail: 'Product Already Exists' });
+        setSubmitting(false)
     })
 };

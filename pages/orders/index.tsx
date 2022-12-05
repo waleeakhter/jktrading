@@ -23,7 +23,7 @@ const Index = ({ errorCode, orders }: Props) => {
         <Layout>
             <div className="tabs-name flex border p-button w-fit items-center p-0">
                 {tabs.map(({ name }) =>
-                    <h1 key={name} className={`cursor-pointer text-lg p-4  mb-0  rounded-none ${name === currentTab ? 'text-green-700 font-extrabold ' : ''}`}
+                    <h1 key={name} className={` ${name === currentTab ? ' active-tab ' : ''}`}
                         onClick={(e => setCurrentTab(name))}>{name}</h1>
                 )}
             </div>
