@@ -26,7 +26,7 @@ export default async function handler(
                     shop: order.shop_id.shop_name,
                     product: order.product_id.product_name,
                     quantity: order.sell_quantity,
-                    price: order.sell_price,
+                    price: order.product_id.sell_price,
                     total_Price: order.total_amount,
 
                 }
