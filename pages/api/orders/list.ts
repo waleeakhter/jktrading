@@ -11,7 +11,7 @@ export default async function handler(
     res: NextApiResponse<Data>
 ) {
     const {
-        query: { q },
+        query: { googlesheet },
         method,
     } = req;
     await dbConnect()
@@ -21,26 +21,12 @@ export default async function handler(
             break;
         case 'GET':
             const orders = await Order.find({}).populate([{ path: 'product_id', model: Product }, { path: 'shop_id', model: Shop }])
-            const test = await Order.aggregate(
-                [
-                    { $unwind: "$product_id" },
-                    {
-                        $lookup:
-                        {
-                            from: "Product",
-                            localField: "product_id",
-                            foreignField: "_id",
-                            as: "Product"
-                        }
-                    },
-                    {
-                        $group: { _id: "$shop_id", 'orders': { $push: "$$ROOT" } }
-                    },
-                ]
-            )
-
-            console.log(test, "test")
-            res.status(200).json(test)
+            const ord = orders.reduce((orders, obj) => {
+                (orders[obj['shop_id']['shop_name']] = orders[obj['shop_id']['shop_name']] || []).push(obj);
+                return orders;
+            }, {});
+            console.log(ord, "test")
+            res.status(200).json(googlesheet === "true" ? ord : orders)
 
 
 

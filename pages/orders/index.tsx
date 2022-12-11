@@ -41,7 +41,6 @@ export async function getServerSideProps(context: GetSessionParams | undefined) 
     const session = await getSession(context)
     if (session) {
         const req = await getOrders()
-        console.log(req)
         const errorCode = req.data ? false : req.response?.status
         const orders = req.data
         return { props: { errorCode, orders } }
