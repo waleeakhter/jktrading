@@ -21,12 +21,15 @@ export default async function handler(
             break;
         case 'GET':
             const orders = await Order.find({}).populate([{ path: 'product_id', model: Product }, { path: 'shop_id', model: Shop }])
-            const ord = orders.reduce((orders, obj) => {
-                (orders[obj['shop_id']['shop_name']] = orders[obj['shop_id']['shop_name']] || []).push(obj);
-                return orders;
-            }, {});
-            console.log(ord, "test")
-            res.status(200).json(googlesheet === "true" ? ord : orders)
+            const refine = orders.map(order => {
+                return { Shop: order.shop_id.shop_name, Product: order.product_id.product_name, Quantity: order.sell_quantity, Price: order.total_amount, }
+            })
+            const sortOrders = refine.sort((a, b) => {
+                if (a.Shop > b.Shop) return 1;
+                if (a.Shop < b.Shop) return -1;
+                return 0;
+            });
+            res.status(200).json(googlesheet === "true" ? sortOrders : orders)
 
 
 
