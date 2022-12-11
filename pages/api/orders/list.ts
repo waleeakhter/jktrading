@@ -27,6 +27,7 @@ export default async function handler(
                     product: order.product_id.product_name,
                     quantity: order.sell_quantity,
                     price: order.product_id.sell_price,
+                    discount: order.total_discount,
                     total_Price: order.total_amount,
 
                 }
