@@ -21,7 +21,26 @@ export default async function handler(
             break;
         case 'GET':
             const orders = await Order.find({}).populate([{ path: 'product_id', model: Product }, { path: 'shop_id', model: Shop }])
-            res.status(200).json(orders)
+            const test = await Order.aggregate(
+                [
+                    { $unwind: "$product_id" },
+                    {
+                        $lookup:
+                        {
+                            from: "Product",
+                            localField: "product_id",
+                            foreignField: "_id",
+                            as: "Product"
+                        }
+                    },
+                    {
+                        $group: { _id: "$shop_id", 'orders': { $push: "$$ROOT" } }
+                    },
+                ]
+            )
+
+            console.log(test, "test")
+            res.status(200).json(test)
 
 
 
