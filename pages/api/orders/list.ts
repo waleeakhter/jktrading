@@ -32,12 +32,16 @@ export default async function handler(
 
                 }
             })
-            const sortOrders = refine.sort((a, b) => {
-                if (a.shop > b.shop) return 1;
-                if (a.shop < b.shop) return -1;
-                return 0;
-            });
-            res.status(200).json(googlesheet === "true" ? sortOrders : orders)
+            // const sortOrders = refine.sort((a, b) => {
+            //     if (a.shop > b.shop) return 1;
+            //     if (a.shop < b.shop) return -1;
+            //     return 0;
+            // });
+            const groupOrders = refine.reduce((result: any, item) => ({
+                ...result,
+                [item.shop]: [...(result[item.shop] || []), item]
+            }), {});
+            res.status(200).json(googlesheet === "true" ? groupOrders : orders)
 
 
 
