@@ -14,7 +14,7 @@ import { getCategories, getProducts } from './../../helper/dataFetch'
 import { useRouter } from 'next/router'
 import API from '../../utils/axios';
 import { getSession, GetSessionParams } from 'next-auth/react';
-type Props = { categories?: Array<Object>, products: Array<{ name: string }> }
+type Props = { categories?: Array<Object>, products?: Array<{ name: string }> }
 
 const AddProduct = (props: Props) => {
     // const [error, setError] = useState([]);
@@ -68,7 +68,7 @@ const AddProduct = (props: Props) => {
                                     onChange={(e) => setFieldValue('name', e.target.value)}
                                 />
                                 <datalist id='products'>
-                                    {products.length > 0 &&
+                                    {products && products.length > 0 &&
                                         products.map(({ name }, i) => (
                                             <option key={name}>{name}</option>
                                         ))

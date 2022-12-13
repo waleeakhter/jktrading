@@ -1,10 +1,11 @@
 import { FormikHelpers } from 'formik';
 import { NextRouter } from 'next/router';
 import API from '../../../../utils/axios'
+import { initialVal } from './intialvalues';
 
 // onsubmit function
 
-export const onSubmit = (values: Object, action: FormikHelpers<typeof values>, toast: any, id: string, router: NextRouter) => {
+export const onSubmit = (values: initialVal, action: FormikHelpers<typeof values>, toast: any, id: string, router: NextRouter) => {
 
     API({ url: "shops/add", method: id ? 'PATCH' : 'POST', data: values }).then(res => {
         console.log(res)

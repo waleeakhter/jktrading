@@ -36,7 +36,7 @@ const index = ({ request, shops }: Props) => {
                 <Card className="surface-0 shadow-2 p-[0_10px_!important] border-1 border-50 border-round">
                     <div className="flex justify-between mb-3">
                         <div>
-                            <h1 className="block  text-xl mb-3 text-white">Lcd's Inventery</h1>
+                            <h1 className="block  text-xl mb-3 text-white">Lcd&apos;s Inventery</h1>
                             <div className="text-900 font-medium text-xl text-white">£{sumTotal(filter("Lcd's"))}</div>
                         </div>
                         <div className="flex items-center justify-center bg-orange-100 border-round shadow-inner rounded-full" style={{ width: '3rem', height: '3rem' }}>
@@ -47,7 +47,7 @@ const index = ({ request, shops }: Props) => {
                 <Card className="surface-0 shadow-2 p-[0_10px_!important] border-1 border-50 border-round">
                     <div className="flex justify-between mb-3">
                         <div className='text-white'>
-                            <h1 className="block  text-xl mb-3">Total LCD's</h1>
+                            <h1 className="block  text-xl mb-3">Total LCD&apos;s</h1>
                             <div className="text-900 font-medium text-xl">{filter("Lcd's").length}</div>
                         </div>
                         <div className="flex items-center justify-center shadow-inner rounded-full " style={{ width: '3rem', height: '3rem' }}>

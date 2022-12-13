@@ -1,9 +1,9 @@
-type initialVals = {
+export type initialVal = {
   name: string,
 
 }
 
-export const initialVals: initialVals = {
+export const initialVals: initialVal = {
   name: "",
 
 };
