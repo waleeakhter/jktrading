@@ -5,7 +5,7 @@ if (env == "development") {
     url = 'http://localhost:3000/api'
 }
 else if (env == "production") {
-    url = process.env.Live_API_URL
+    url = 'https://jktrading.vercel.app/api/'
 }
 const API = axios.create({
     baseURL: url,
