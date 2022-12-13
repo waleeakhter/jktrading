@@ -142,7 +142,7 @@ const AddProduct = (props: Props) => {
                             <Button disabled={submitting} label="Save" icon=" pi pi-arrow-up-right " iconPos='right' />
                         </div>
 
-                        {true && (
+                        {false && (
                             <div className={'row mt-5'}>
                                 <div className={'col-12'}>
                                     <code>

@@ -11,7 +11,6 @@ import { getProducts, getShops } from '../../helper/dataFetch';
 import { validationSchema } from "./validation"
 import { initialValues } from './values'
 import { setPrice, submitForm, Product } from "./functions"
-import Select from './../AdvanceSelect/Select'
 type Props = {
     products?: Array<Object>,
     modalVisible: {
@@ -75,7 +74,7 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
                         <form className=' grid md:grid-cols-2 gap-8' >
                             <div className='from-group'>
                                 <label>Product</label>
-                                <Select
+                                <Dropdown
 
                                     // defualtValue={values.product}
                                     options={items.map((pro: any) =>
@@ -83,7 +82,7 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
                                     )}
                                     autoFocus
                                     placeholder="Select..." className="w-full"
-                                    onChange={(e: Event) => selectProduct(e.value, setFieldValue)}
+                                    onChange={(e) => selectProduct(e.value, setFieldValue)}
                                 />
                                 <div className='text-red-800'> <ErrorMessage name="product" /> </div>
                             </div>
