@@ -7,6 +7,7 @@ import { Button } from 'primereact/button';
 import { FilterMatchMode } from 'primereact/api';
 import SellingModal from '../Modal/SellingModal';
 import ActionButtons from './ActionButtons';
+import Link from 'next/link';
 
 type Props = {
     data: Array<Object>, columns: Array<Object>, search: string, tableName: string
@@ -63,7 +64,12 @@ const Datatable = (props: Props & actionButtons) => {
     const renderHeader = () => {
         return (
             <div className="flex justify-between items-center">
-                <h5 className="m-0 text-2xl text-white">{props.tableName}</h5>
+                <div className='flex  gap-3 items-center '>
+                    <h5 className="m-0 text-2xl text-white">{props.tableName}</h5>
+                    <Link href={`/${props.targetRoute}/add`} >
+                        <Button label='' icon="pi pi-plus" />
+                    </Link>
+                </div>
                 <div className='flex gap-2'>
                     <span className="p-input-icon-left">
                         <i className="pi pi-search" />

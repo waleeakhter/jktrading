@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import { seedAdmin, seedCategories } from './seeders';
 
 let cached = global.mongoose
-
 if (!cached) {
     cached = global.mongoose = { conn: null, promise: null }
 }
@@ -18,8 +17,16 @@ async function dbConnect() {
             useUnifiedTopology: true,
             bufferCommands: false,
         }
+        const env = process.env.NODE_ENV;
+        let url = ""
+        if (env == "development") {
+            url = process.env.L_DB_URI
+        }
+        else if (env == "production") {
+            url = process.env.DB_URI
+        }
 
-        cached.promise = mongoose.connect(`mongodb+srv://jktrading:jKtradinG.pT@cluster0.rtlavan.mongodb.net/?retryWrites=true&w=majority`,
+        cached.promise = mongoose.connect(url,
             opts).then(mongoose => {
                 seedAdmin()
                 seedCategories()

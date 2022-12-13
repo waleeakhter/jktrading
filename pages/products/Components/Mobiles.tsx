@@ -7,14 +7,14 @@ const Mobiles = ({ request }: Props) => {
 
 
     const columns = [
-        { field: 'product_name', header: 'Product Name' },
+        { field: 'name', header: 'Product Name' },
         // { field: 'purchased_price', header: 'Purchased Price' },
         { field: 'sell_price', header: 'Selling Price' },
         { field: 'condition', header: 'Condition' },
         { field: 'quantity', header: 'Quantity' }
     ]
     return (
-        <Datatable data={request ?? []} columns={columns} buyBtn={true} targetRoute={'products'} search={'product_name'} tableName={"Mobiles"} />
+        <Datatable data={request ?? []} columns={columns} buyBtn={true} targetRoute={'products'} search={'name'} tableName={"Mobiles"} />
     )
 }
 

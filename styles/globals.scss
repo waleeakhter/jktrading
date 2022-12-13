@@ -3,36 +3,38 @@
 @tailwind utilities;
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
 %box-shadow-outer {
-  background: linear-gradient(128.11deg, #26272b 6.67%, #34393f 97.78%) !important;
-  box-shadow: -3px -3px 9px #353b42, 1px 1px 5px #0d0e0f, inset 1px 1px 9px #2d2e35;
+  background: linear-gradient(129.67deg, rgba(122, 127, 133, 0.4) 14.52%, rgba(255, 255, 255, 0.4) 100%),
+    linear-gradient(133.76deg, #e6e7ed -18.17%, #f7f8fa 140.27%) !important;
+  background-blend-mode: soft-light, normal;
+  box-shadow: -2px -3px 8px #fafafc, 1px 1px 5px #b1b5c6, inset 1px 1px 3px #ebecf0 !important;
   border-radius: 8px;
 }
 
 %box-shadow-inner {
-  background: linear-gradient(137.63deg, #26272b 9.53%, #34393f 95.92%) !important;
-  box-shadow: inset -2px -2px 3px #40464e, inset 2px 2px 6px #0d0e0f !important;
+  background: #ebecf0 !important;
+  box-shadow: inset -2px -2px 6px #ffffff, inset 2px 2px 3px #bdc1d1 !important;
 }
 
 %text-color {
-  background: linear-gradient(315.23deg, #e6e7ed 7.39%, #f7f8fa 92.37%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: #e6e7ed !important;
+  color: var(--text-color) !important;
 }
 %text-color-black {
-  background: linear-gradient(328.82deg, #26272b 22.72%, #34393f 89.31%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
-  color: #34393f !important;
+  color: var(--text-color) !important;
+}
+
+%focus {
+  &:enabled {
+    &:hover,
+    &:focus {
+      border-color: var(--text-color) !important;
+    }
+  }
 }
 
 :root {
-  --bg-color: linear-gradient(328.82deg, #26272b 22.72%, #34393f 89.31%);
-  --text-color: #e6e7ed;
-  --text-green: #28f8c8;
+  --bg-color: #f2f2f2;
+  --text-color: #757e95;
+  --text-green: #757e95;
 }
 * {
   &::-webkit-scrollbar-track {
@@ -88,20 +90,21 @@
     justify-content: center;
     font-size: 1.125rem /* 18px */;
     line-height: 0 /* 28px */;
+    color: var(--text-color);
     &.active-tab {
       @extend %box-shadow-inner;
-      color: #28f8c8;
       font-weight: bold;
     }
   }
 }
 .btn-delete {
   background: linear-gradient(130.46deg, #ed5249 12.58%, #c91d12 89.78%) !important;
-  box-shadow: -5px -5px 20px #404e4a, 4px 3px 19px #0d0f0f, inset 1px 1px 7px #c91d12;
+  box-shadow: none !important;
   border-radius: 8px;
   border: 0 !important;
-  &:focus {
-    box-shadow: 0 0 0 2px #17b596, 0 0 0 2px #28f8c8, 0 1px 1px 0 black;
+  color: var(--bg-color) !important;
+  > span {
+    color: var(--bg-color) !important;
   }
 }
 body {
@@ -110,6 +113,7 @@ body {
   text-rendering: optimizeLegibility !important;
   -webkit-font-smoothing: antialiased !important;
   -moz-osx-font-smoothing: grayscale;
+  color: var(--text-color);
   *:not(.pi) {
     font-family: "Josefin Sans", sans-serif !important;
   }
@@ -139,11 +143,10 @@ body {
     width: 100%;
     align-items: center;
     padding: 0.5rem;
-
     color: var(--text-color) !important;
-    :focus {
-      outline: 0;
-    }
+    border-radius: 8px;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    @extend %focus;
   }
   label {
     display: block;
@@ -179,15 +182,10 @@ body {
   }
   table {
     .p-datatable-thead {
-      background: linear-gradient(130.46deg, #17b596 12.58%, #28fac9 89.78%);
-      box-shadow: -5px -5px 20px #404e4a, 4px 3px 19px #0d0f0f, inset 1px 1px 7px #1b9882;
+      @extend %box-shadow-outer;
       border-radius: 0;
       * {
-        background: linear-gradient(328.82deg, #26272b 22.72%, #34393f 89.31%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-fill-color: transparent;
+        color: var(--text-color);
       }
     }
 
@@ -200,13 +198,12 @@ body {
   }
 
   .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
-    background: linear-gradient(130.46deg, #17b596 12.58%, #28fac9 89.78%);
-    border: 3px solid #28f8c8;
-    box-shadow: -5px -5px 20px #404e4a, 4px 3px 19px #0d0f0f, inset 1px 1px 7px #1b9882;
+    @extend %box-shadow-outer;
     font-weight: bold;
     font-size: 20px;
     opacity: 1;
-    color: #26272b;
+    color: var(--text-color);
+    border-radius: 50%;
   }
 
   .dashboard-card {
@@ -238,7 +235,11 @@ body {
       &.active {
         @extend %box-shadow-inner;
         a {
-          @apply text-[#28F8C8];
+          color: var(--text-color);
+          font-weight: 900;
+          > i {
+            font-weight: 900;
+          }
         }
       }
       &.nav-dropdown {
@@ -286,14 +287,12 @@ body {
 }
 
 .p-dialog {
-  @extend %box-shadow-outer;
+  background-color: var(--bg-color);
   *:is(.p-dialog-header, .p-dialog-content) {
     color: var(--text-color) !important;
     background-color: transparent;
   }
   form > div:last-child {
-    background: #2f3237;
-    clip-path: fill-box;
-    box-shadow: 0 0 0 20px #2f3237;
+    background-color: var(--bg-color);
   }
 }

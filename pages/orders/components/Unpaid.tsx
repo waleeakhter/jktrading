@@ -14,7 +14,7 @@ const Unpaid = ({ request }: Props) => {
             paidBtn={true}
             returnBtn={true}
             targetRoute={'orders'}
-            search={'shop_id.shop_name'} tableName={"Unpaid Orders"}
+            search={'shop.name'} tableName={"Unpaid Orders"}
         />
     )
 }

@@ -12,7 +12,6 @@ import { useRouter } from 'next/router';
 type Props = { shop: Object, id: any }
 
 const AddShop = (props: Props) => {
-    const [submitting, setSubmitting] = useState(false);
     const [initialValues, setInitialValues] = useState(initialVals);
 
     const toast = React.useRef(null);
@@ -28,29 +27,29 @@ const AddShop = (props: Props) => {
             <Formik
                 validationSchema={validationSchema()}
                 initialValues={initialValues}
-                onSubmit={(values) => onSubmit(values, setSubmitting, props, toast, props.id, router)}
+                onSubmit={(values, actions) => onSubmit(values, actions, toast, props.id, router)}
                 enableReinitialize={true}
             >
-                {({ values, errors, touched, setFieldValue, handleSubmit, }) => (
+                {({ values, errors, touched, setFieldValue, handleSubmit, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
                         <h1 className='text-theme text-3xl'>Add Shop</h1>
                         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mt-5">
 
                             <div className='from-group'>
                                 <label>Shop Name</label>
-                                <InputText name="shop_name" type="text" className="capitalize" value={values.shop_name ?? ""}
+                                <InputText name="name" type="text" className="capitalize" value={values.name ?? ""}
                                     placeholder="Enter Shop Name" autoComplete='off'
-                                    onChange={(e) => setFieldValue('shop_name', e.target.value)}
+                                    onChange={(e) => setFieldValue('name', e.target.value)}
                                 />
                                 <span className='text-error'>
-                                    <ErrorMessage name='shop_name' />
+                                    <ErrorMessage name='name' />
                                 </span>
                             </div>
 
                         </div>
 
                         <div className='from-group w-full mt-5'>
-                            <Button type='submit' label="Save" icon=" pi pi-arrow-up-right " iconPos='right' />
+                            <Button loading={isSubmitting} type='submit' label="Save" icon=" pi pi-arrow-up-right " iconPos='right' />
                         </div>
 
                         {true && (

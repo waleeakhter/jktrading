@@ -7,15 +7,15 @@ type Props = { request: Array<Object> }
 const Lcds = (props: Props) => {
 
     const columns = [
-        { field: 'product_name', header: 'Product Name' },
-        // { field: 'category_id.category_name', header: 'Category' },
+        { field: 'name', header: 'Product Name' },
+        // { field: 'category.name', header: 'Category' },
         // { field: 'purchased_price', header: 'Purchased Price' },
         { field: 'sell_price', header: 'Selling Price' },
         // { field: 'condition', header: 'Condition' },
         { field: 'quantity', header: 'Quantity' }
     ]
     return (
-        <Datatable data={props.request ?? []} columns={columns} targetRoute={'products'} search={'product_name'} tableName={"Lcd's"} />
+        <Datatable data={props.request ?? []} columns={columns} targetRoute={'products'} search={'name'} tableName={"Lcd's"} />
     )
 }
 export default Lcds

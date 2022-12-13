@@ -20,13 +20,13 @@ export default async function handler(
             res.status(400).json({ message: "POST method not supported" });
             break;
         case 'GET':
-            const orders = await Order.find({}).populate([{ path: 'product_id', model: Product }, { path: 'shop_id', model: Shop }])
+            const orders = await Order.find({}).populate([{ path: 'product', model: Product }, { path: 'shop', model: Shop }])
             const refine = orders.map(order => {
                 return {
-                    shop: order.shop_id.shop_name,
-                    product: order.product_id.product_name,
+                    shop: order.shop.name,
+                    product: order.product.name,
                     quantity: order.sell_quantity,
-                    price: order.product_id.sell_price,
+                    price: order.product.sell_price,
                     discount: order.total_discount,
                     total_Price: order.total_amount,
 

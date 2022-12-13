@@ -5,11 +5,11 @@ import { getProducts } from '../../helper/dataFetch'
 import { getSession, GetSessionParams } from 'next-auth/react'
 import Mobiles from './Components/Mobiles'
 import Lcds from './Components/Lcds'
-type Props = { products: [{ category_id: { category_name: string } }], errorCode?: null }
+type Props = { products: [{ category: { name: string } }], errorCode?: null }
 
 const Lists = ({ products, errorCode }: Props) => {
     const filterThings = (array: Props['products'], fillter: string) => {
-        return array.filter(({ category_id }) => category_id.category_name === fillter)
+        return array.filter(({ category }) => category.name === fillter)
     }
 
     const tabs = [

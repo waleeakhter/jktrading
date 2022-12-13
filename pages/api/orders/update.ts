@@ -31,7 +31,7 @@ export default async function handler(
                 console.log(err)
                 res.status(401).json(err)
             } else {
-                porductModal.findOne({ _id: req.body.product_id._id }, (err: Data, product: { quantity: number, save: Function }) => {
+                porductModal.findOne({ _id: req.body.product._id }, (err: Data, product: { quantity: number, save: Function }) => {
                     if (err) {
                         res.status(500).json({ errorMessage: "Something went wrong", erros: err })
                     } else {

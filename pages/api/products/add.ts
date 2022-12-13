@@ -14,7 +14,7 @@ export default async function handler(
             res.status(400).json({ message: "GET method not supported" });
             break;
         case 'POST':
-            const checkProduct = await porductModal.find({ product_name: req.body.product_name, category_id: req.body.category_id })
+            const checkProduct = await porductModal.find({ name: req.body.name, category: req.body.category })
             console.log(checkProduct)
             if (checkProduct.length > 0) {
                 res.status(403).json(checkProduct);

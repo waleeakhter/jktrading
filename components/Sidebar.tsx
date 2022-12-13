@@ -16,38 +16,14 @@ const Sidebar = (props: Props) => {
             icon: "pi pi-th-large",
         },
         {
-            path: "/products",
+            path: "/products/lists",
             label: "Products",
             icon: "pi pi-shopping-bag",
-            child: [
-                {
-                    path: "/products/add",
-                    label: "Add Products",
-                    icon: "pi pi-plus",
-                },
-                {
-                    path: "/products/lists",
-                    label: "All Products",
-                    icon: "pi pi-mobile",
-                },
-            ]
         },
         {
-            path: "/shops",
-            label: "Shops",
+            path: "/shops/list",
+            label: "Clients",
             icon: "pi pi-mobile",
-            child: [
-                {
-                    path: "/shops/add",
-                    label: "Add Shop",
-                    icon: "pi pi-plus"
-                },
-                {
-                    path: "/shops/list",
-                    label: "Shops List",
-                    icon: "pi pi-list"
-                }
-            ]
         },
         {
             path: "/orders",

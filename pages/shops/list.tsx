@@ -10,14 +10,14 @@ const AllShops = (props: Props) => {
 
 
     const columns = [
-        { field: 'shop_name', header: 'Shop Name' },
+        { field: 'name', header: 'Shop Name' },
         { field: 'total_orders', header: 'Total Orders' },
         { field: 'outstanding.amount', header: 'Outstanding Balance' },
         { body: '0', header: 'Recevied Balance' },
     ]
     return (
         <Layout>
-            <Datatable data={props.request} columns={columns} targetRoute={'shops'} search={'shop_name'} tableName={"Shops"} />
+            <Datatable data={props.request} columns={columns} targetRoute={'shops'} search={'name'} tableName={"Clients"} />
         </Layout>
     )
 }

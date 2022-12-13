@@ -7,12 +7,14 @@ import { onSubmit } from "../../components/pages/product/JS/generic"
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
+import { AutoComplete } from 'primereact/autocomplete';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
-import { getCategories } from './../../helper/dataFetch'
+import { getCategories, getProducts } from './../../helper/dataFetch'
 import { useRouter } from 'next/router'
 import API from '../../utils/axios';
-type Props = { categories?: Array<Object> }
+import { getSession, GetSessionParams } from 'next-auth/react';
+type Props = { categories?: Array<Object>, products: Array<{ name: string }> }
 
 const AddProduct = (props: Props) => {
     // const [error, setError] = useState([]);
@@ -20,19 +22,29 @@ const AddProduct = (props: Props) => {
     const [initialValues, setInitialValues] = useState(initialVals);
     const phoneCondition = [
         { label: 'New', value: "new" },
-        { label: 'Old', value: "old" },
+        { label: 'A', value: "A" },
+        { label: 'B', value: "B" },
+        { label: 'C', value: "C" },
     ];
 
     const toast = React.useRef(null);
 
     const router = useRouter()
     const { id } = router.query
-
+    const [products, setProducts] = useState([] as Props['products'])
     useEffect(() => {
         id && API.get(`/products/list?_id=${id}`).then(res => {
-            setInitialValues({ ...res.data.at(0), category_id: res.data.at(0).category_id._id })
+            setInitialValues({ ...res.data.at(0), category: res.data.at(0).category._id })
         })
     }, [id])
+
+    useEffect(() => {
+        API.get(`/products/list`).then(res => {
+            setProducts(res.data)
+        })
+    }, [])
+
+
 
     return (
         <Layout>
@@ -51,18 +63,27 @@ const AddProduct = (props: Props) => {
 
                             <div className='from-group'>
                                 <label>Product Name</label>
-                                <InputText name="first_name" type="text" value={values.product_name ?? ""}
+                                <InputText list="products" name="first_name" type="text" value={values.name ?? ""}
                                     placeholder="Enter Product Name" autoComplete='off'
-                                    onChange={(e) => setFieldValue('product_name', e.target.value)}
+                                    onChange={(e) => setFieldValue('name', e.target.value)}
                                 />
+                                <datalist id='products'>
+                                    {products.length > 0 &&
+                                        products.map(({ name }, i) => (
+                                            <option key={name}>{name}</option>
+                                        ))
+                                    }
+                                </datalist>
+
                                 <span className='text-error'>
-                                    <ErrorMessage name='product_name' />
+                                    <ErrorMessage name='name' />
                                 </span>
+
                             </div>
 
                             <div className='from-group'>
                                 <label>Product Actual Price</label>
-                                <InputNumber locale="de-DE" mode="decimal" placeholder='Enter actual price' value={values.purchased_price ?? ""}
+                                <InputNumber placeholder='Enter actual price' value={values.purchased_price ?? ""}
                                     min={0} className="w-full"
                                     onChange={(e) => setFieldValue('purchased_price', e.value)}
                                 />
@@ -73,7 +94,7 @@ const AddProduct = (props: Props) => {
 
                             <div className='from-group'>
                                 <label>Product Selling Price</label>
-                                <InputNumber locale="de-DE" mode="decimal" placeholder='Enter selling price' value={values.sell_price ?? ""}
+                                <InputNumber placeholder='Enter selling price' value={values.sell_price ?? ""}
                                     min={0} className="w-full"
                                     onChange={(e) => setFieldValue('sell_price', e.value)}
                                 />
@@ -95,16 +116,16 @@ const AddProduct = (props: Props) => {
 
                             <div className='from-group'>
                                 <label>Category</label>
-                                <Dropdown optionLabel="label" value={values.category_id} options={props.categories}
+                                <Dropdown optionLabel="label" value={values.category} options={props.categories}
                                     placeholder="Select..." className="w-full" name="category"
-                                    onChange={(e) => { setFieldValue('category_id', e.value); setFieldValue('category_name', e.target.name) }}
+                                    onChange={(e) => { setFieldValue('category', e.value); }}
                                 />
                                 <span className='text-error'>
-                                    <ErrorMessage name='category_id' />
+                                    <ErrorMessage name='category' />
                                 </span>
                             </div>
 
-                            {values.category_id && <div className='from-group'>
+                            {values.category && <div className='from-group'>
                                 <label>Product Condition</label>
                                 <Dropdown optionLabel="label" value={values.condition} options={phoneCondition}
                                     placeholder="Select..." className="w-full"
@@ -144,12 +165,22 @@ const AddProduct = (props: Props) => {
     )
 }
 
-export async function getServerSideProps() {
-    // Fetch data from external API
-    const categories = await getCategories()
-    // Pass data to the page via props
-    return { props: { categories } }
 
 
+export async function getServerSideProps(context: GetSessionParams | undefined) {
+    // Fetching data from external API
+    const session = await getSession(context)
+    if (session) {
+        const categories = await getCategories()
+        // Pass data to the page via props
+        return { props: { categories } }
+    } else {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            },
+        };
+    }
 }
 export default AddProduct

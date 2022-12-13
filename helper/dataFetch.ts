@@ -4,8 +4,8 @@ import API from '../utils/axios'
 export const getProducts: Function = async (filter: String) => {
 
     const request = await API.get('products/list');
-    const products = filter ? request.data.filter(({ category_id }: any) =>
-        category_id.category_name === filter
+    const products = filter ? request.data.filter(({ category }: any) =>
+        category.name === filter
     ) : request.data
 
     return products;
@@ -17,8 +17,8 @@ export const getProducts: Function = async (filter: String) => {
 // get categories
 export const getCategories: Function = async () => {
     const request = await API.get('categories');
-    const categories = request.data.map((cat: { category_name: String; _id: String }) =>
-        ({ 'value': cat._id, 'label': cat.category_name })
+    const categories = request.data.map((cat: { name: String; _id: String }) =>
+        ({ 'value': cat._id, 'label': cat.name })
     )
     return categories;
 
@@ -28,8 +28,8 @@ export const getCategories: Function = async () => {
 // get shops 
 export const getShops: Function = async (dropdown?: boolean) => {
     const request = await API.get('shops/list');
-    const shops = dropdown ? request.data.map((shop: { shop_name: String; _id: String }) =>
-        ({ 'value': shop._id, 'label': shop.shop_name })
+    const shops = dropdown ? request.data.map((shop: { name: String; _id: String }) =>
+        ({ 'value': shop._id, 'label': shop.name })
     )
         : request.data
     return shops;

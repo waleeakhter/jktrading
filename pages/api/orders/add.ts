@@ -20,7 +20,7 @@ export default async function handler(
                 if (err) {
                     res.status(400).json({ error: "Something went wrong", errors: err })
                 } else {
-                    Product.findOne({ _id: req.body.product_id }, (err: Data, product: { quantity: number, save: Function }) => {
+                    Product.findOne({ _id: req.body.product }, (err: Data, product: { quantity: number, save: Function }) => {
                         if (err) {
                             res.status(500).json(err)
                         } else {

@@ -16,7 +16,7 @@ exports.seedAdmin = () => {
 }
 
 exports.seedCategories = () => {
-    const categories = [{ category_name: 'Mobile' }, { category_name: "Lcd's" }]
+    const categories = [{ name: 'Mobile' }, { name: "Lcd's" }]
     categoriesModal.countDocuments({}, function (err, count) {
         console.log('Number of Categories:', count)
         if (count === 0) {
