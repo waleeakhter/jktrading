@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import dbConnect from './../../../utils/conn'
 import orderModal from '../../../lib/models/Order'
 import porductModal from '../../../lib/models/Product'
+import allowCors from '../allowCors'
 type Data = {}
 const connect = await dbConnect()
 console.log(connect)
@@ -62,3 +63,4 @@ export default async function handler(
 
 
 }
+allowCors(handler)
