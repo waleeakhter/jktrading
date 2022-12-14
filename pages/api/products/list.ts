@@ -18,7 +18,7 @@ export default async function handler(
             res.status(400).json({ message: "GET method not supported" });
             break;
         case 'GET':
-            const getProducts = await Product.find(query ?? {}, { sort: { 'created_at': -1 } }).populate([{ path: 'category', model: Category, select: ['name'] }])
+            const getProducts = await Product.find(query ?? {}, {}, { sort: { 'created_at': -1 } }).populate([{ path: 'category', model: Category, select: ['name'] }])
             res.status(200).json(getProducts)
             break;
         default:

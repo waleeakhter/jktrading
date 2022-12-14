@@ -32,13 +32,13 @@ const AddShop = (props: Props) => {
             >
                 {({ values, errors, touched, setFieldValue, handleSubmit, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
-                        <h1 className='text-theme text-3xl'>Add Shop</h1>
+                        <h1 className='text-theme text-3xl'>Add Client</h1>
                         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mt-5">
 
                             <div className='from-group'>
-                                <label>Shop Name</label>
+                                <label>Client Name</label>
                                 <InputText name="name" type="text" className="capitalize" value={values.name ?? ""}
-                                    placeholder="Enter Shop Name" autoComplete='off'
+                                    placeholder="Enter Client Name" autoComplete='off'
                                     onChange={(e) => setFieldValue('name', e.target.value)}
                                 />
                                 <span className='text-error'>
@@ -77,7 +77,8 @@ const AddShop = (props: Props) => {
 
 export async function getServerSideProps() {
     // Fetch data from external API
-    const categories = await getCategories()
+    const categories = await getCategories();
+
     // Pass data to the page via props
     return { props: { categories } }
 

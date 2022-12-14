@@ -4,6 +4,7 @@ import dbConnect from '../../../utils/conn'
 import Order from '../../../lib/models/Order'
 import Product from '../../../lib/models/Product';
 import Shop from '../../../lib/models/Shop';
+import Category from '../../../lib/models/Category';
 type Data = {}
 
 export default async function handler(
@@ -11,7 +12,7 @@ export default async function handler(
     res: NextApiResponse<Data>
 ) {
     const {
-        query: { googlesheet },
+        query,
         method,
     } = req;
     await dbConnect()
@@ -20,7 +21,17 @@ export default async function handler(
             res.status(400).json({ message: "POST method not supported" });
             break;
         case 'GET':
-            const orders = await Order.find({}).populate([{ path: 'product', model: Product }, { path: 'shop', model: Shop }])
+            let q = { ...query };
+            const date: any = q?.createdAt ?? ""
+            q = date && { createdAt: new Date(date).toISOString() }
+            delete q['googlesheet']
+            console.log(q, "query.googlesheet")
+            const orders = await Order.find({ ...q }).sort({ createdAt: -1 }).populate([{
+                path: 'product', model: Product, populate: {
+                    path: 'category',
+                    model: Category
+                }
+            }, { path: 'shop', model: Shop }])
             const refine = orders.map(order => {
                 return {
                     shop: order.shop.name,
@@ -29,6 +40,7 @@ export default async function handler(
                     price: order.product.sell_price,
                     discount: order.total_discount,
                     total_Price: order.total_amount,
+                    category: order.product.category.name,
 
                 }
             })
@@ -41,9 +53,8 @@ export default async function handler(
                 ...result,
                 [item.shop]: [...(result[item.shop] || []), item]
             }), {});
-            res.status(200).json(googlesheet === "true" ? groupOrders : orders)
-
-
+            res.status(200).json(query?.googlesheet ? groupOrders : orders)
+            // res.send(query.googlesheet ? groupOrders : orders)
 
             break;
         default:

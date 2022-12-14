@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useCallback, useContext, useEffect } from 'react'
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
@@ -28,11 +28,12 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
     const { toastMessage } = useContext(AppContext)
 
 
-    React.useEffect(() => {
+
+    useEffect(() => {
         setGetProduct(singleProduct)
     }, [singleProduct])
 
-    React.useEffect(() => {
+    const getShopData = useCallback(() => {
         const fetchData = async () => {
             const data = await getShops(true)
             setShops(data)
@@ -42,7 +43,7 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
             .catch(console.error);;
     }, [setShops])
 
-    React.useEffect(() => {
+    const getPro = useCallback(() => {
         const fetchData = async () => {
             const data = await getProducts()
             setItems(data)
@@ -51,6 +52,12 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
         fetchData().catch(console.error)
 
     }, [setItems])
+
+    useEffect(() => {
+        modalVisible.sellingModal && (
+            getPro(), getShopData()
+        )
+    }, [modalVisible.sellingModal])
 
     const selectProduct: Function = (value: String, setFieldValue: Function) => {
         setFieldValue('product', value)
@@ -68,15 +75,15 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
                 onSubmit={(values, actions) => submitForm(values, actions, setGetProduct, router, toastMessage)}
                 enableReinitialize={true}
             >
-                {({ values, errors, touched, setFieldValue, handleSubmit, isSubmitting }) => (
+                {({ values, errors, touched, setFieldValue, handleSubmit, isSubmitting, resetForm }) => (
                     <Dialog header="Sell the Product" visible={modalVisible.sellingModal} style={{ width: '95vw', height: '95vh' }}
-                        onHide={() => modalVisible.setSellingModal(false)}>
+                        onHide={() => { setGetProduct((prev) => prev = {} as Product); modalVisible.setSellingModal(false); }}>
                         <form className=' grid md:grid-cols-2 gap-8' >
                             <div className='from-group'>
                                 <label>Product</label>
                                 <Dropdown
 
-                                    // defualtValue={values.product}
+                                    value={values.product}
                                     options={items.map((pro: any) =>
                                         ({ 'value': pro._id, 'label': pro.name })
                                     )}

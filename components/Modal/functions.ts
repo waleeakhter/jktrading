@@ -8,8 +8,9 @@ export type Product = { _id: string, name: string, quantity: number, sell_price:
 
 export const setPrice = (setFieldValue: Function, values: ReturnType<typeof initialValues>,
     name: string, value: number, toastMessage: Function) => {
-
-    setFieldValue('sell_quantity', value <= values.quantity ? value : values.quantity)
+    const val = value <= values.quantity ? value : values.quantity
+    setFieldValue('sell_quantity', val)
+    setFieldValue("sub_total", val * values.sell_price)
     // const setValue = (val: number) => {
     //     setFieldValue(name, val)
     // }
