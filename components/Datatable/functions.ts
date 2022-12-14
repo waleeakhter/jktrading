@@ -40,7 +40,7 @@ export const cancelOrder = (e: React.SyntheticEvent, data: { status?: string }, 
     disabledBtns(btn, true);
     Object.assign(data, { delete: true })
     delete data['status'];
-    API.patch('orders/update', data).then(res => {
+    API.post('orders/update', data).then(res => {
         res.data.successMessage && toast("success", "Removed", res.data.successMessage)
         router.replace(router.asPath);
 

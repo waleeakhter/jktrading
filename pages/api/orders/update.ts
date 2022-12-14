@@ -49,9 +49,6 @@ export default async function handler(
             res.status(400).json({ error: "GET method not supported" });
             break;
         case 'POST':
-            res.status(400).json({ error: "POST method not supported" });
-            break;
-        case 'PATCH':
             if (!req.body._id && (!req.body.status || !req.body.delete)) res.status(401).json({ error: "Somthing Went Wrong" });
 
             req.body.status ? updateOrder() : null;
