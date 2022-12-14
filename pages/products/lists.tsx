@@ -42,7 +42,7 @@ export async function getServerSideProps(context: GetSessionParams | undefined) 
     // Fetching data from external API
     const session = await getSession(context)
     if (session) {
-        const products = await getProducts("Mobile")
+        const products = await getProducts("")
         const errorCode = products ? false : products.response?.status
         return { props: { products, errorCode } }
     } else {

@@ -1,6 +1,5 @@
 import React from 'react'
 import Datatable from '../../../components/Datatable/Datatable'
-import { getProducts } from '../../../helper/dataFetch'
 type Props = { request: Array<Object> }
 
 
