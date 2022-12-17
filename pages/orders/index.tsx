@@ -2,7 +2,7 @@ import React from 'react'
 import Error from 'next/error'
 import Layout from '../../components/Layout'
 import { getOrders } from '../../helper/dataFetch'
-import columns from '../../components/pages/product/columns'
+import columns from '../../components/pages/orders/columns'
 import { getSession, GetSessionParams } from 'next-auth/react'
 import Datatable from '../../components/Datatable/Datatable'
 type Props = { orders: Array<{ status: string }>, errorCode?: any }
@@ -60,12 +60,6 @@ export async function getServerSideProps(context: GetSessionParams | undefined) 
             },
         };
     }
-    // Pass data to the page via props
-
-
-
-
-
 }
 
 export default Index

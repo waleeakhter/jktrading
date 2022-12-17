@@ -1,6 +1,6 @@
 import React from 'react'
 import Datatable from '../../../components/Datatable/Datatable'
-import columns from '../../../components/pages/product/columns';
+import columns from '../../../components/pages/orders/columns';
 type Props = { request: Array<Object> }
 
 

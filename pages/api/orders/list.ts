@@ -22,10 +22,10 @@ export default async function handler(
             break;
         case 'GET':
             let q = { ...query };
-            const date: any = q?.createdAt ?? ""
-            q = date && { createdAt: new Date(date).toISOString() }
-            delete q['googlesheet']
             console.log(q, "query.googlesheet")
+            const date: any = q?.createdAt ?? ""
+            q = date ? { createdAt: new Date(date).toISOString(), ...q } : q
+            delete q['googlesheet']
             const orders = await Order.find({ ...q }).sort({ createdAt: -1 }).populate([{
                 path: 'product', model: Product, populate: {
                     path: 'category',

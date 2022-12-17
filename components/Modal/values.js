@@ -7,7 +7,9 @@ export const initialValues = (getProduct) => {
         total_discount: Number(),
         sub_total: getProduct?.sell_price ?? Number(),
         total_amount: Number(),
-        sell_quantity: Number(1),
-        quantity: getProduct?.quantity ?? Number()
+        sell_quantity: Number(),
+        quantity: getProduct?.quantity ?? Number(),
+        reference: String(),
+        condition: String()
     }
 }

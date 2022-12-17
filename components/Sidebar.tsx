@@ -17,7 +17,7 @@ const Sidebar = (props: Props) => {
         },
         {
             path: "/products/lists",
-            label: "Products",
+            label: "Stock",
             icon: "pi pi-shopping-bag",
         },
         {
@@ -28,6 +28,11 @@ const Sidebar = (props: Props) => {
         {
             path: "/orders",
             label: "Orders",
+            icon: "pi pi-mobile",
+        },
+        {
+            path: "/payments",
+            label: "Payment History",
             icon: "pi pi-mobile",
         }
     ]

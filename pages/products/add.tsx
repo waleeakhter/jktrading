@@ -7,10 +7,9 @@ import { onSubmit } from "../../components/pages/product/JS/generic"
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
-import { AutoComplete } from 'primereact/autocomplete';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
-import { getCategories, getProducts } from './../../helper/dataFetch'
+import { getCategories } from './../../helper/dataFetch'
 import { useRouter } from 'next/router'
 import API from '../../utils/axios';
 import { getSession, GetSessionParams } from 'next-auth/react';
@@ -18,14 +17,7 @@ type Props = { categories?: Array<Object>, products?: Array<{ name: string }> }
 
 const AddProduct = (props: Props) => {
     // const [error, setError] = useState([]);
-    const [submitting, setSubmitting] = useState(false);
     const [initialValues, setInitialValues] = useState(initialVals);
-    const phoneCondition = [
-        { label: 'New', value: "new" },
-        { label: 'A', value: "A" },
-        { label: 'B', value: "B" },
-        { label: 'C', value: "C" },
-    ];
 
     const toast = React.useRef(null);
 
@@ -53,18 +45,18 @@ const AddProduct = (props: Props) => {
             <Formik
                 validationSchema={validationSchema()}
                 initialValues={initialValues}
-                onSubmit={(values) => onSubmit({ values, setSubmitting, router, toast, id })}
+                onSubmit={(values, actions) => onSubmit({ values, actions, router, toast, id, setProducts })}
                 enableReinitialize={true}
             >
-                {({ values, errors, touched, setFieldValue, handleSubmit, }) => (
+                {({ values, errors, touched, setFieldValue, handleSubmit, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
-                        <h1 className='text-theme text-3xl'>Add Product</h1>
+                        <h1 className='text-theme text-3xl'>Add Item</h1>
                         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mt-5">
 
                             <div className='from-group'>
-                                <label>Product Name</label>
+                                <label>Item Name</label>
                                 <InputText list="products" name="first_name" type="text" value={values.name ?? ""}
-                                    placeholder="Enter Product Name" autoComplete='off'
+                                    placeholder="Enter Item Name" autoComplete='off'
                                     onChange={(e) => setFieldValue('name', e.target.value)}
                                 />
                                 <datalist id='products'>
@@ -82,7 +74,7 @@ const AddProduct = (props: Props) => {
                             </div>
 
                             <div className='from-group'>
-                                <label>Product Actual Price</label>
+                                <label>Item Actual Price</label>
                                 <InputNumber placeholder='Enter actual price' value={values.purchased_price ?? ""}
                                     min={0} className="w-full"
                                     onChange={(e) => setFieldValue('purchased_price', e.value)}
@@ -93,7 +85,7 @@ const AddProduct = (props: Props) => {
                             </div>
 
                             <div className='from-group'>
-                                <label>Product Selling Price</label>
+                                <label>Item Selling Price</label>
                                 <InputNumber placeholder='Enter selling price' value={values.sell_price ?? ""}
                                     min={0} className="w-full"
                                     onChange={(e) => setFieldValue('sell_price', e.value)}
@@ -104,7 +96,7 @@ const AddProduct = (props: Props) => {
                             </div>
 
                             <div className='from-group'>
-                                <label>Product Quantity</label>
+                                <label>Item Quantity</label>
                                 <InputNumber placeholder='Enter Quantity' value={values.quantity ?? ""}
                                     min={0} className="w-full"
                                     onChange={(e) => setFieldValue('quantity', e.value)}
@@ -125,21 +117,14 @@ const AddProduct = (props: Props) => {
                                 </span>
                             </div>
 
-                            {values.category && <div className='from-group'>
-                                <label>Product Condition</label>
-                                <Dropdown optionLabel="label" value={values.condition} options={phoneCondition}
-                                    placeholder="Select..." className="w-full"
-                                    onChange={(e) => setFieldValue('condition', e.value)}
-                                />
-                                <span className='text-error'>
-                                    <ErrorMessage name='condition' />
-                                </span>
-                            </div>}
+
+
+
 
                         </div>
 
                         <div className='from-group w-full mt-5'>
-                            <Button disabled={submitting} label="Save" icon=" pi pi-arrow-up-right " iconPos='right' />
+                            <Button disabled={isSubmitting} loading={isSubmitting} label="Save" icon=" pi pi-arrow-up-right " iconPos='right' />
                         </div>
 
                         {false && (

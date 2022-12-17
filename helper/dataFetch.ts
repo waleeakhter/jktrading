@@ -1,3 +1,4 @@
+import { error } from 'console';
 import API from '../utils/axios'
 
 // get products
@@ -27,7 +28,8 @@ export const getCategories: Function = async () => {
 
 // get shops 
 export const getShops: Function = async (dropdown?: boolean) => {
-    const request = await API.get('shops/list');
+    const request = await API.get('shops/list')
+
     const shops = dropdown ? request.data.map((shop: { name: String; _id: String }) =>
         ({ 'value': shop._id, 'label': shop.name })
     )
@@ -43,4 +45,10 @@ export const getOrders: Function = async () => {
     const orders = request
     return orders;
 
+}
+
+// current balance 
+export const getBalance: Function = async () => {
+    const request = await API.get('accountbalance');
+    return request.data
 }

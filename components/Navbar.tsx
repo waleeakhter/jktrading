@@ -3,6 +3,7 @@ import { Menu } from 'primereact/menu';
 import { Button } from 'primereact/button';
 import { signOut } from 'next-auth/react'
 import SellingModal from './Modal/SellingModal';
+import Modal from './Client/Modal';
 let items = [
     { label: 'Profile', icon: 'pi pi-fw pi-plus' },
     { label: 'Logout', icon: 'pi pi-fw pi-sign-out', command: () => signOut() }
@@ -11,14 +12,13 @@ type Props = { action: HTMLDivElement | any }
 
 const Navbar = (props: Props) => {
     const menu: any = React.useRef<HTMLButtonElement>(null);
-    const [sellingModal, setSellingModal] = useState(false)
+    const [sellingModal, setSellingModal] = useState(false);
+    const [visible, setVisibility] = useState(false)
     const navItems = [
         {
             label: 'Client Detail',
             icon: 'pi pi-shop',
-            command: () => {
-                ""
-            }
+            command: () => setVisibility(true)
         },
         {
             label: 'Order',
@@ -52,6 +52,11 @@ const Navbar = (props: Props) => {
             <SellingModal modalVisible={{
                 sellingModal, setSellingModal
             }} />
+            <Modal clientModal={{
+                visible,
+                setVisibility
+            }} />
+
         </>
     )
 }

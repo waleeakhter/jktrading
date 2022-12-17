@@ -4,13 +4,13 @@ import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { Formik, ErrorMessage } from "formik";
-import { useRouter } from 'next/router';
 import { AppContext } from '../Layout';
 import { Message } from 'primereact/message';
 import { getProducts, getShops } from '../../helper/dataFetch';
 import { validationSchema } from "./validation"
 import { initialValues } from './values'
 import { setPrice, submitForm, Product } from "./functions"
+import { InputText } from 'primereact/inputtext';
 type Props = {
     products?: Array<Object>,
     modalVisible: {
@@ -23,10 +23,9 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
     // const [products, setProducts] = React.useState([] as Array<Object>)
     const [getProduct, setGetProduct] = React.useState(singleProduct)
     const [items, setItems] = React.useState([] as Array<Object>)
-    const router = useRouter();
     const [shops, setShops] = React.useState([])
     const { toastMessage } = useContext(AppContext)
-
+    const phoneCondition = ["New", "Kit", "A", "B", "C"]
 
 
     useEffect(() => {
@@ -54,10 +53,12 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
     }, [setItems])
 
     useEffect(() => {
+
         modalVisible.sellingModal && (
             getPro(), getShopData()
         )
-    }, [modalVisible.sellingModal])
+    }, [modalVisible.sellingModal, getPro, getShopData])
+
 
     const selectProduct: Function = (value: String, setFieldValue: Function) => {
         setFieldValue('product', value)
@@ -72,10 +73,10 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
             <Formik
                 validationSchema={validationSchema()}
                 initialValues={initialValues(getProduct)}
-                onSubmit={(values, actions) => submitForm(values, actions, setGetProduct, router, toastMessage)}
+                onSubmit={(values, actions) => submitForm(values, actions, setGetProduct, toastMessage, setItems)}
                 enableReinitialize={true}
             >
-                {({ values, errors, touched, setFieldValue, handleSubmit, isSubmitting, resetForm }) => (
+                {({ values, errors, touched, setFieldValue, handleSubmit, isSubmitting }) => (
                     <Dialog header="Sell the Product" visible={modalVisible.sellingModal} style={{ width: '95vw', height: '95vh' }}
                         onHide={() => { setGetProduct((prev) => prev = {} as Product); modalVisible.setSellingModal(false); }}>
                         <form className=' grid md:grid-cols-2 gap-8' >
@@ -110,10 +111,10 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
                                         <div className='from-group'>
                                             <label>Price</label>
                                             <InputNumber value={values.sell_price}
-                                                placeholder='Enter Price'
-                                                locale="de-DE" mode="currency"
-                                                min={0} className="w-full" currency="EUR" disabled />
-                                            <div className='text-red-800'> <ErrorMessage name="price" /></div>
+                                                placeholder='Enter Price' locale="de-DE" min={0} className="w-full"
+                                                onChange={(e) => setPrice(setFieldValue, values, "sell_price", e.value ?? 0, toastMessage)}
+                                            />
+                                            <div className='text-red-800'> <ErrorMessage name="sell_price" /></div>
                                         </div>
 
                                         {/* <div className='from-group'>
@@ -127,12 +128,36 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
 
                                         </div> */}
                                         <div className="from-group">
-                                            <label htmlFor="quantity">Quantity</label>
-                                            <input type="number" id="quantity" value={values.sell_quantity ?? 1}
-                                                min={1} max={values.quantity}
-                                                onChange={(e) => { setPrice(setFieldValue, values, "sell_quantity", parseInt(e.target.value) || 1, toastMessage) }} />
+                                            <label htmlFor="quantity" className='flex justify-between'>Quantity <p>Available Stock : {values.quantity - values.sell_quantity || 0}</p></label>
+                                            <InputNumber value={values.sell_quantity}
+                                                placeholder='Enter Price' min={0} className="w-full" max={values.quantity}
+                                                onChange={(e) => setPrice(setFieldValue, values, "sell_quantity", e.value ?? 0, toastMessage)}
+                                            />
+
                                             <div className='text-red-800'> <ErrorMessage name="sell_quantity" /></div>
-                                            {!errors.sell_price && <p>Available Stock : {values.quantity - values.sell_quantity || 0}</p>}
+                                        </div>
+                                        <div className='from-group'>
+                                            <label>Item Condition</label>
+
+                                            <InputText list="condition" name="condition" type="text" value={values.condition ?? ""}
+                                                placeholder="Enter item condition" autoComplete='off'
+                                                onChange={(e) => setFieldValue('condition', e.target.value)}
+                                            />
+                                            <datalist id='condition'>
+                                                {phoneCondition && phoneCondition.length > 0 &&
+                                                    phoneCondition.map((label, i) => (
+                                                        <option key={label}>{label}</option>
+                                                    ))
+                                                }
+                                            </datalist>
+                                        </div>
+
+                                        <div className='from-group'>
+                                            <label>Any Reference</label>
+                                            <InputText name="reference" type="text" value={values.reference ?? ""}
+                                                placeholder="Enter any item Reference" autoComplete='off'
+                                                onChange={(e) => setFieldValue('reference', e.target.value)}
+                                            />
                                         </div>
                                         <div className=' border-t pt-4 flex items-center  gap-4 top-auto  absolute inset-0 p-4  '>
 

@@ -207,6 +207,10 @@ body {
 
   .dashboard-card {
     .p-card {
+      height: fit-content;
+      .p-card-content {
+        padding: 0;
+      }
       &:hover {
         @extend %box-shadow-inner;
       }

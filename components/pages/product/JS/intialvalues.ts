@@ -4,7 +4,6 @@ type initialVals = {
   sell_price: number,
   quantity: number,
   fixed_quantity: number
-  condition: string,
   category: string,
 
 }
@@ -15,7 +14,6 @@ export const initialVals: initialVals = {
   sell_price: 0,
   quantity: 0,
   fixed_quantity: 0,
-  condition: "",
   category: "",
 
 };

@@ -8,23 +8,25 @@ export type Product = { _id: string, name: string, quantity: number, sell_price:
 
 export const setPrice = (setFieldValue: Function, values: ReturnType<typeof initialValues>,
     name: string, value: number, toastMessage: Function) => {
-    const val = value <= values.quantity ? value : values.quantity
-    setFieldValue('sell_quantity', val)
-    setFieldValue("sub_total", val * values.sell_price)
-    // const setValue = (val: number) => {
-    //     setFieldValue(name, val)
-    // }
+
+    const setValue = (val: number) => {
+        setFieldValue(name, val)
+    }
 
     // const discount = (val: number) => {
     //     setValue(val)
     //     setFieldValue("total_discount", val * values.sell_quantity)
     // }
+    if (name === "sell_price") {
+        setValue(value)
+        setFieldValue("sub_total", value * values.sell_quantity)
+    }
+    if (name === "sell_quantity") {
+        const val = value <= values.quantity ? value : values.quantity
 
-    // if (name === "sell_quantity") {
-    //     setValue(value)
-    //     setFieldValue("sub_total", value * values.sell_price)
-    //     setFieldValue("total_discount", value * values.discount);
-    // }
+        setValue(val)
+        setFieldValue("sub_total", val * values.sell_price)
+    }
 
 
     // if (name === "discount") {
@@ -45,20 +47,21 @@ export const openModal = (productData: Object, setSellingModal: Function, setSin
 
 export const submitForm = (values: ReturnType<typeof initialValues>,
     actions: FormikHelpers<ReturnType<typeof initialValues>>,
-    setGetProduct: Function, router: NextRouter, toastMessage: Function) => {
+    setGetProduct: Function, toastMessage: Function, setItems: Function) => {
 
     values.total_amount = values.sub_total - values.total_discount;
     console.log(values)
 
     API.post('orders/add', values).then(res => {
-        console.log(res.data);
         setGetProduct((prev: Product) => prev = {} as Product)
-        actions.resetForm();
+        setItems((prev: Array<{ _id: string }>) => prev.map((pro) => {
+            return pro._id === res.data.product._id ? { ...pro, quantity: res.data.product.quantity } : pro
+        }))
         res.data?.message && toastMessage("success", "Order", res.data.message)
-        router.replace(router.asPath);
+        actions.resetForm();
     }).catch(err => {
         console.log(err)
-        actions.setSubmitting(true)
+        actions.setSubmitting(false)
     })
 
 }

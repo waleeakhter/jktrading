@@ -14,7 +14,7 @@ const Lists = ({ products, errorCode }: Props) => {
 
     const tabs = [
         { name: "Mobile", component: <Mobiles request={filterThings(products, "Mobile")} /> },
-        { name: "Lcd's", component: <Lcds request={filterThings(products, "Lcd's")} /> },
+        { name: "Lcd's", component: <Lcds request={filterThings(products, "Lcd")} /> },
     ]
     const [currentTab, setCurrentTab] = React.useState(tabs.at(0)?.name)
     if (errorCode) {

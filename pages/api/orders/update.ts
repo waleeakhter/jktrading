@@ -4,6 +4,7 @@ import dbConnect from './../../../utils/conn'
 import orderModal from '../../../lib/models/Order'
 import porductModal from '../../../lib/models/Product'
 import allowCors from '../allowCors'
+import Shop from '../../../lib/models/Shop'
 type Data = {}
 const connect = await dbConnect()
 console.log(connect)
@@ -27,7 +28,7 @@ export default async function handler(
     }
     const deleteOrder = () => {
         console.log("Deleted Order check : ", req.body);
-        orderModal.findOneAndDelete({ _id: req.body._id }, function (err: Data, order: { sell_quantity: number }) {
+        orderModal.findOneAndDelete({ _id: req.body._id }, function (err: Data, order: { sell_quantity: number, total_amount: number }) {
             if (err) {
                 console.log(err)
                 res.status(401).json(err)
@@ -35,10 +36,19 @@ export default async function handler(
                 porductModal.findOne({ _id: req.body.product._id }, (err: Data, product: { quantity: number, save: Function }) => {
                     if (err) {
                         res.status(500).json({ errorMessage: "Something went wrong", erros: err })
+                        return
                     } else {
-                        product.quantity = product.quantity + order.sell_quantity
-                        product.save()
-                        res.status(200).json({ successMessage: "Order removed successfuly", order: order })
+                        product.quantity = product.quantity + order.sell_quantity;
+                        Shop.findOne({ shop: req.body.shop._id }, (err: Data, shop: { credit: number, save: Function }) => {
+                            if (err) {
+                                res.status(500).json({ errorMessage: "Something went wrong", erros: err })
+                                return
+                            }
+                            shop.credit = shop.credit > 0 ? shop.credit - order.total_amount : 0
+                            shop.save()
+                            product.save()
+                            res.status(200).json({ successMessage: "Order removed successfuly", order: order })
+                        })
                     }
                 });
 

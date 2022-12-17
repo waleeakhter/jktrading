@@ -22,13 +22,12 @@ export default async function handler(
             let getShops = await Shop.find(query ?? {})
             getShops = await Promise.all(getShops.map(async shop => {
                 const len = await Order.find({ shop: shop._id })
-                const ammout = await Order.aggregate([
+                const quantity = await Order.aggregate([
                     { $match: { shop: shop._id } },
-                    { $group: { _id: null, amount: { $sum: "$total_amount" } } }
+                    { $group: { _id: null, quantity: { $sum: "$sell_quantity" } } }
                 ])
-                return { ...shop._doc, total_orders: len.length, outstanding: ammout[0] ?? { amount: 0 } }
+                return { ...shop._doc, items: quantity[0] ?? { quantity: 0 } }
             }))
-            console.log(getShops)
             res.status(200).json(getShops)
 
             break;
