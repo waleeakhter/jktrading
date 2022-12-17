@@ -51,7 +51,7 @@ const Dropdown = ({ target, callback, options, placeholder, className }: Props) 
                     value={selectedItem} suggestions={filteredItem} dropdown
                     completeMethod={searchItem} field="name" onChange={handler} />
                 :
-                <div className='flex justify-center items-center h-full'>
+                <div className='flex-[0_0_250px]'>
                     <Skeleton color='black' height='52px' className=' cursor-wait ' shape="rectangle" />
                 </div>
             }
