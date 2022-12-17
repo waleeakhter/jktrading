@@ -2,7 +2,7 @@ import { AutoComplete } from 'primereact/autocomplete';
 import React, { useCallback, useEffect, useState } from 'react'
 import API from '../../utils/axios';
 
-type Props = { target?: string, callback: Function, options?: Array<{ name: string }>, placeholder?: string, className?: string }
+type Props = { target?: string, callback: Function, options?: Array<{ name?: string }>, placeholder?: string, className?: string }
 
 const Dropdown = ({ target, callback, options, placeholder, className }: Props) => {
     const [filteredItem, setFilteredItem] = useState([] as any);
