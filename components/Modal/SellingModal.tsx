@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect } from 'react'
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { Formik, ErrorMessage } from "formik";
 import { AppContext } from '../Layout';
@@ -11,6 +10,7 @@ import { validationSchema } from "./validation"
 import { initialValues } from './values'
 import { setPrice, submitForm, Product } from "./functions"
 import { InputText } from 'primereact/inputtext';
+import Dropdown from '../AutoComplete/dropdown';
 type Props = {
     products?: Array<Object>,
     modalVisible: {
@@ -34,7 +34,7 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
 
     const getShopData = useCallback(() => {
         const fetchData = async () => {
-            const data = await getShops(true)
+            const data = await getShops()
             setShops(data)
 
         }
@@ -83,14 +83,10 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
                             <div className='from-group'>
                                 <label>Product</label>
                                 <Dropdown
-
-                                    value={values.product}
-                                    options={items.map((pro: any) =>
-                                        ({ 'value': pro._id, 'label': pro.name })
-                                    )}
-                                    autoFocus
-                                    placeholder="Select..." className="w-full"
-                                    onChange={(e) => selectProduct(e.value, setFieldValue)}
+                                    options={items}
+                                    placeholder="Select..."
+                                    className="w-full"
+                                    callback={(e: { _id: string }) => { selectProduct(e._id, setFieldValue) }}
                                 />
                                 <div className='text-red-800'> <ErrorMessage name="product" /> </div>
                             </div>
@@ -99,11 +95,10 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
                                     <>
                                         <div className='from-group'>
                                             <label>Shop</label>
-                                            <Dropdown optionLabel="label"
-                                                value={values.shop}
+                                            <Dropdown
                                                 options={shops}
                                                 placeholder="Select..." className="w-full"
-                                                onChange={(e) => setFieldValue('shop', e.value)}
+                                                callback={(e: { _id: string }) => setFieldValue('shop', e._id)}
                                             />
                                             <div className='text-red-800'> <ErrorMessage name="shop" /> </div>
                                         </div>

@@ -9,6 +9,8 @@ const Payments = ({ tableName, data, search, showShop }: Props) => {
     const columns = [
         showShop ? { field: "shop.name", header: "Shop" } : false,
         { body: (rowData: { received: number }) => <p className='text-xl'>{rowData.received} <i className='pi pi-euro'></i></p>, header: 'Received' },
+        { body: (rowData: { discount: number }) => <p className='text-xl'>{rowData.discount} <i className='pi pi-euro'></i></p>, header: 'Discount' },
+        showShop ? { body: (rowData: { panding: number }) => <p className='text-xl'>{rowData.panding} <i className='pi pi-euro'></i></p>, header: 'Panding' } : false,
         { body: (rowData: { createdAt: string }) => new Date(rowData.createdAt).toDateString(), header: 'Date' },
 
     ]

@@ -7,13 +7,13 @@ import Dropdown from '../AutoComplete/dropdown';
 import { AppContext } from '../Layout';
 import Orders from './Orders';
 import Payments from './Payments';
-type Props = { clientModal: { visible: boolean, setVisibility: Function } }
-
+type Props = { clientModal: { visible: boolean, setVisibility: Function, } }
+type Amount = { received: number, discount: number }
 const Modal = ({ clientModal }: Props) => {
     const [selectedShop, setSelectedShop] = useState(Object)
     const [shops, setShops] = useState(Array<{ status: string }>);
     const [payments, setPayments] = useState(Array<Object>);
-    const [debit, setDebit] = useState(Number)
+    const [amount, setAmount] = useState({} as Amount)
     const { toastMessage } = useContext(AppContext)
 
     const getData = useCallback(
@@ -37,22 +37,27 @@ const Modal = ({ clientModal }: Props) => {
         clientModal.setVisibility(false);
         setShops([])
         setSelectedShop((prev: {}) => prev = {})
-        setDebit(0);
+        setAmount({} as Amount);
 
     }
     const payment = (e: React.SyntheticEvent) => {
         const btn = e.target;
-        (btn as HTMLButtonElement).disabled = true
-        if (debit <= 0 || null || undefined) {
-            toastMessage("error", "Error", "Enter recevid amount")
+        if (amount.received <= 0 || null || undefined) {
+            toastMessage("error", "Error", "Enter received amount")
             return
         }
-        API.post("/payments", { received: debit, shop: selectedShop._id }).then(res => {
+        console.log(amount.received + amount.discount)
+        if ((amount.received + amount.discount) > selectedShop.credit) {
+            toastMessage("error", "Error", "Clear your discount or adjust received amount")
+            return
+        }
+        (btn as HTMLButtonElement).disabled = true
+        API.post("/payments", { ...amount, shop: selectedShop._id }).then(res => {
             console.log(res.data);
             setSelectedShop(res.data.shop);
             setPayments(prev => prev = [res.data.payment, ...prev])
-            setDebit(0);
-            setTimeout(() => (btn as HTMLButtonElement).disabled = false, 300);
+            setAmount({} as Amount);
+            (btn as HTMLButtonElement).disabled = false;
             toastMessage("success", "Payment", res.data.message);
 
         }).catch(err => {
@@ -76,9 +81,16 @@ const Modal = ({ clientModal }: Props) => {
                 <h1>Received  : {selectedShop.debit}<i className='pi pi-euro'></i></h1></>}
             {selectedShop.credit > 0 ?
                 <div className='flex ml-auto justify-end items-end'>
-                    <div>
-                        <label className='text-sm'>Received Amount </label>
-                        <InputNumber min={0} max={selectedShop.credit} value={debit} onValueChange={(e) => setDebit(e.value ?? 0)} />
+                    <div className='flex'>
+                        <div className="w-32">
+                            <label className='text-sm'>Received</label>
+                            <InputNumber min={0} max={selectedShop.credit} value={amount.received} onValueChange={(e) => setAmount({ ...amount, received: e.value ?? 0 })} />
+                        </div>
+
+                        <div className='w-24'>
+                            <label className='text-sm'>Discount</label>
+                            <InputNumber min={0} max={300} value={amount.discount} onValueChange={(e) => setAmount({ ...amount, discount: e.value ?? 0 })} />
+                        </div>
                     </div>
                     <Button label='Save' icon="pi pi-plus" className='h-14' onClick={payment} />
                 </div> : null}

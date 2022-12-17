@@ -13,7 +13,7 @@ export default async function handler(
     const { method, query } = req;
     switch (method) {
         case 'GET':
-            const getPayment = await paymentModal.find({ ...query }).populate({ path: "shop", model: Shop }).sort({ createdAt: -1 });
+            const getPayment = await paymentModal.find({ ...query }).sort({ createdAt: -1 }).populate({ path: "shop", model: Shop }).sort({ createdAt: -1 });
             res.status(200).json(getPayment)
             break;
         case 'POST':
@@ -23,11 +23,16 @@ export default async function handler(
                 res.status(400).json({ debitError: "Received Amount is greater than Debit Amount", received: req.body.received })
                 return
             }
-            paymentModal.create(req.body, (err: Data, pay: { received: number }) => {
+            paymentModal.create(req.body, (err: Data, pay: {
+                panding: number, save: Function
+                discount: number, received: number
+            }) => {
                 if (err) { res.status(400).json({ message: "errors", err: err }); return }
-                shop.credit = (shop.credit ?? 0) - pay.received;
+                shop.credit = (shop.credit ?? 0) - (pay.received + pay.discount);
                 shop.debit = (shop.debit ?? 0) + pay.received;
                 shop.save()
+                pay.panding = shop.credit;
+                pay.save()
                 Balance.findOneAndUpdate({ name: 'JK Trading' }, { $inc: { 'balance': pay.received } }, { new: true },
                     function (err, blanc) {
                         if (err) { res.status(400).json({ message: "errors", err: err }); console.log(err, " err"); return }

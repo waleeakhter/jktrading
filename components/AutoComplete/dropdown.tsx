@@ -2,46 +2,47 @@ import { AutoComplete } from 'primereact/autocomplete';
 import React, { useCallback, useEffect, useState } from 'react'
 import API from '../../utils/axios';
 
-type Props = { target: string, callback: Function }
+type Props = { target?: string, callback: Function, options?: Array<{ name: string }>, placeholder?: string, className?: string }
 
-const Dropdown = ({ target, callback }: Props) => {
-    const [filteredShop, setFilteredShop] = useState([]);
-    const [selectedShop, setSelectedShop] = useState(null);
-    const [items, setItems] = useState([]);
+const Dropdown = ({ target, callback, options, placeholder, className }: Props) => {
+    const [filteredItem, setFilteredItem] = useState([] as any);
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [items, setItems] = useState(options ?? []);
 
     const getitems = useCallback(() => {
-        API.get(target)
-            .then((response) => setItems(response.data))
+        API.get(target ?? "")
+            .then((response) => { console.log(response.data); setItems(response.data) })
             .catch(error => console.log(error))
-    }, [target])
+    }, [target, options])
 
     useEffect(() => {
         target && getitems()
     }, [target, getitems])
+
     const handler = (e: { value: any }) => {
-        setSelectedShop(e.value);
+        setSelectedItem(e.value);
         (callback && e.value?._id) && callback(e.value)
     }
 
-    const searchCountry = (event: any) => {
+    const searchItem = (event: any) => {
         setTimeout(() => {
-            let _filteredCountries;
+            let _filteredItems;
             if (!event.query.trim().length) {
-                _filteredCountries = [...items];
+                _filteredItems = [...items];
             }
             else {
-                _filteredCountries = items.filter((country: { name: string }) => {
-                    return country.name.toLowerCase().startsWith(event.query.toLowerCase());
+                _filteredItems = items.filter((item: { name: string }) => {
+                    return item.name.toLowerCase().startsWith(event.query.toLowerCase());
                 });
             }
 
-            setFilteredShop(_filteredCountries);
+            setFilteredItem(_filteredItems);
         }, 100);
     }
     return (
-        <AutoComplete placeholder='Enter Client Name'
-            value={selectedShop} suggestions={filteredShop} dropdown
-            completeMethod={searchCountry} field="name" onChange={handler} />
+        <AutoComplete placeholder={placeholder} className={className}
+            value={selectedItem} suggestions={filteredItem} dropdown
+            completeMethod={searchItem} field="name" onChange={handler} />
 
     )
 }
