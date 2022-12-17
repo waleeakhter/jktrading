@@ -26,6 +26,7 @@ const AddProduct = (props: Props) => {
     const [products, setProducts] = useState([] as Props['products'])
     useEffect(() => {
         id && API.get(`/products/list?_id=${id}`).then(res => {
+            console.log(res.data)
             setInitialValues({ ...res.data.at(0), category: res.data.at(0).category._id })
         })
     }, [id])

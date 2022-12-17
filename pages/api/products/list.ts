@@ -8,7 +8,7 @@ const connect = await dbConnect()
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
-) {
+): Promise<void> {
     const {
         query,
         method,
@@ -19,7 +19,7 @@ export default async function handler(
             break;
         case 'GET':
             console.log(query, "query")
-            Product.find({}, (err: Data, product: Array<{ category: { name: string } }>) => {
+            Product.find({ ...query }, (err: Data, product: Array<{ category: { name: string } }>) => {
                 const products = query.category ? product.filter(pro => {
                     return pro.category.name === query.category
                 }) : product
