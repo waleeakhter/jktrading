@@ -1,6 +1,7 @@
 import { AutoComplete } from 'primereact/autocomplete';
 import React, { useCallback, useEffect, useState } from 'react'
 import API from '../../utils/axios';
+import { ProgressBar } from 'primereact/progressbar';
 
 type Props = { target?: string, callback: Function, options?: Array<{ name: string }> | undefined, placeholder?: string, className?: string }
 
@@ -8,10 +9,11 @@ const Dropdown = ({ target, callback, options, placeholder, className }: Props) 
     const [filteredItem, setFilteredItem] = useState([] as any);
     const [selectedItem, setSelectedItem] = useState(null);
     const [items, setItems] = useState(options ?? []);
+    const [loading, setLoading] = useState(true)
 
     const getitems = useCallback(() => {
         API.get(target ?? "")
-            .then((response) => { console.log(response.data); setItems(response.data) })
+            .then((response) => { console.log(response.data); setLoading(false); setItems(response.data) })
             .catch(error => console.log(error))
     }, [target])
 
@@ -40,10 +42,18 @@ const Dropdown = ({ target, callback, options, placeholder, className }: Props) 
         }, 100);
     }
     return (
-        <AutoComplete placeholder={placeholder} className={className}
-            value={selectedItem} suggestions={filteredItem} dropdown
-            completeMethod={searchItem} field="name" onChange={handler} />
+        <>
+            {!loading ?
+                <AutoComplete placeholder={placeholder} className={className}
+                    value={selectedItem} suggestions={filteredItem} dropdown
+                    completeMethod={searchItem} field="name" onChange={handler} />
+                :
+                <div className='flex justify-center items-center h-full'>
+                    <ProgressBar color='black' className='h-2 w-24' mode="indeterminate" />
+                </div>
+            }
 
+        </>
     )
 }
 
