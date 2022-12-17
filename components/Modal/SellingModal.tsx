@@ -83,7 +83,7 @@ const SellingModal = ({ products, modalVisible, singleProduct }: Props) => {
                             <div className='from-group'>
                                 <label>Product</label>
                                 <Dropdown
-                                    options={items}
+                                    target='/products/list'
                                     placeholder="Select..."
                                     className="w-full"
                                     callback={(e: { _id: string }) => { selectProduct(e._id, setFieldValue) }}
