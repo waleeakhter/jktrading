@@ -37,7 +37,7 @@ const Dropdown = ({ target, callback, options, placeholder, className }: Props) 
             }
             else {
                 _filteredItems = items.filter((item: { name: string }) => {
-                    return item.name.toLowerCase().startsWith(event.query.toLowerCase());
+                    return item.name.toLowerCase().includes(event.query.toLowerCase());
                 });
             }
 
