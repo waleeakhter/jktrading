@@ -1,7 +1,7 @@
 import { AutoComplete } from 'primereact/autocomplete';
 import React, { useCallback, useEffect, useState } from 'react'
 import API from '../../utils/axios';
-import { ProgressBar } from 'primereact/progressbar';
+import { Skeleton } from 'primereact/skeleton';
 
 type Props = { target?: string, callback: Function, options?: Array<{ name: string }> | undefined, placeholder?: string, className?: string }
 
@@ -20,6 +20,9 @@ const Dropdown = ({ target, callback, options, placeholder, className }: Props) 
     useEffect(() => {
         target && getitems()
     }, [target, getitems])
+    useEffect(() => {
+        options && setLoading(false)
+    }, [options])
 
     const handler = (e: { value: any }) => {
         setSelectedItem(e.value);
@@ -49,7 +52,7 @@ const Dropdown = ({ target, callback, options, placeholder, className }: Props) 
                     completeMethod={searchItem} field="name" onChange={handler} />
                 :
                 <div className='flex justify-center items-center h-full'>
-                    <ProgressBar color='black' className='h-2 w-24' mode="indeterminate" />
+                    <Skeleton color='black' height='52px' className=' cursor-wait ' shape="rectangle" />
                 </div>
             }
 
